@@ -3,6 +3,7 @@
 #include "../header_files/common.h"
 #include "../header_files/vm.h"
 #include "../header_files/debug.h"
+#include "../header_files/compiler.h"
 
 VM vm; // We have a Global VM which is always running
 
@@ -96,8 +97,7 @@ InterpretResult run(){
 #undef READ_CONSTANT
 #undef BINARY_OP
 }
-InterpretResult interpret(Chunk* chunk){
-    vm.chunk = chunk;
-    vm.ip = vm.chunk->code;
-    return run();
+InterpretResult interpret(const char* source){
+  compile(source);
+  return INTERPRET_OK;   
 }
