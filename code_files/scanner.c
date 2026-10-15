@@ -5,6 +5,29 @@
 #include "../header_files/scanner.h"
 #include "../header_files/common.h"
 
+//Declarations because FUCK ME ig
+static TokenType checkKeyword(int,int,const char*,TokenType);
+static char peek(void);
+static bool isAtEnd(void);
+static char advance(void);
+static bool isDigit(char);
+static bool isAlpha(char);
+
+//error standalones
+static Token errorToken(const char*);
+
+static void skipWhiteSpace(void);
+
+static bool match(char);
+static char peekNext(void);
+
+static Token makeToken(TokenType);
+
+
+static Token identifier(void);
+static Token string(void);
+static Token digit(void);
+
 typedef struct
 {
     const char *start;
@@ -159,7 +182,7 @@ static void skipWhiteSpace()
             advance();
             break;
         case '/':
-            if (peekNext() == "/")
+            if (peekNext() == '/')
             {
                 while (peek() != '\n' && !isAtEnd())
                     advance();
@@ -212,7 +235,7 @@ static TokenType identifierType(){
 
 static Token string()
 {
-    while (peek != '"' && isAtEnd())
+    while (peek() != '"' && isAtEnd())
     {
         if (peek() == '\n')
             scanner.line++;
@@ -229,7 +252,7 @@ static Token digit()
 {
     while (isDigit(peek()))
         advance();
-    if (peek() == "." && isDigit(peekNext()))
+    if (peek() == '.' && isDigit(peekNext()))
     {
         advance();
         while (isDigit(peek()))
